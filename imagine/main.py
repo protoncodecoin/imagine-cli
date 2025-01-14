@@ -1,8 +1,9 @@
+from pathlib import Path
 import click
 from PIL import Image
 
 
-@click.group()
+@click.group(chain=True)
 def cli():
     """Imagine provides tools to resize, edit, transform, create images and thumbnails and convert between file formats"""
     pass
@@ -31,7 +32,7 @@ def image_info(image, s, m, f):
         click.echo(f"Mode: {im.mode}")
     if f:
         click.echo(f"Format: {im.format}")
-    else:
+    if not s and not m and not f:
         click.echo(f"format: {img_format}, size: {img_size} mode: {img_mode}")
 
 
@@ -50,13 +51,27 @@ def process_image(image):
 
 @cli.command()
 @click.argument("directory", type=click.Path(exists=True, dir_okay=True))
-def show_images(directory):
+@click.option(
+    "--r",
+    is_flag=True,
+    show_default=True,
+    default=False,
+    help="Recursively show images shows in subdirectories of specified directory",
+)
+def show_images(directory, r):
     """Show images in the specified directory
 
     eg: imagine show-images /home/nimo/Desktop/pictures/
     """
-    # 1. Get the directory from the user
-    # 2. Convert the directory to path
-    # 3. Get the files of the directory
+    new_path = Path(directory)
+
+    if r:
+        files = new_path.rglob("*.png")
+        for f in files:
+            click.echo(f.name)
+        print("done==========")
+    else:
+        for path in new_path.iterdir():
+            if not path.is_dir():
+                click.echo(path.name)
     # 4. Check if the files are of image types and print them out or throw error
-    click.echo(f"{directory}")
