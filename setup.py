@@ -1,9 +1,11 @@
-from setuptools import setup
+from setuptools import setup, find_packages  # type: ignore
 
 setup(
     name="main",
     version="0.1.0",
-    py_modules=["main"],
+    # py_modules=["main"],
+    packages=find_packages(),
+    include_package_data=True,
     install_requires=[
         "Click",
         "Pillow",
@@ -11,7 +13,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "imagine = main:cli",
+            "snow = snow.main:cli",
         ],
     },
 )

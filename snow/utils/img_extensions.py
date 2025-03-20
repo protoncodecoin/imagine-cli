@@ -1,4 +1,4 @@
-image_extensions = {
+IMAGE_EXTENSIONS = {
     ".png",
     ".jpg",
     ".jpeg",
@@ -16,4 +16,9 @@ image_extensions = {
     ".heic",
     ".bmp",
     ".dib",
+}
+
+COLORS: dict[str, str] = {
+    "success": "green",
+    "failed": "red",
 }

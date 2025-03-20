@@ -4,27 +4,8 @@ import click
 # from click_extra import extra_command
 from click_extra import extra_group, extra_command
 from PIL import Image, ImageOps
+from snow.utils import img_extensions
 
-
-IMAGE_EXTENSIONS = {
-    ".png",
-    ".jpg",
-    ".jpeg",
-    ".jpe",
-    ".jif",
-    ".jfif",
-    ".jfi",
-    ".gif",
-    ".webp",
-    ".tiff",
-    ".tif",
-    ".svg",
-    ".svgz",
-    ".heif",
-    ".heic",
-    ".bmp",
-    ".dib",
-}
 
 COLORS: dict[str, str] = {
     "success": "green",
@@ -35,7 +16,7 @@ COLORS: dict[str, str] = {
 @click.group(chain=True)
 @click.pass_context
 def cli(ctx):
-    """Imagine provides tools to resize, edit, transform, create images and thumbnails and convert between file formats"""
+    """Snow provides tools to resize, edit, transform, create images and thumbnails and convert between file formats"""
     ctx.ensure_object(dict)
 
     # set the working directory where all operations should take place
@@ -57,11 +38,11 @@ def set_working_dir(ctx, working_directory):
     # check to see if there is at least one image in the specified directory
     try:
         count: int = 0
-        for ext in IMAGE_EXTENSIONS:
+        for ext in img_extensions.IMAGE_EXTENSIONS:
             files = specified_dir.rglob(f"*{ext}")
 
             for file in files:
-                if file.suffix in IMAGE_EXTENSIONS:
+                if file.suffix in img_extensions.IMAGE_EXTENSIONS:
                     count += 1  # there is a supported image format in directory
 
         if count > 0:
@@ -189,10 +170,10 @@ def show_images(directory, r):
     new_path = Path(directory)
 
     if r:
-        for ext in IMAGE_EXTENSIONS:
+        for ext in img_extensions.IMAGE_EXTENSIONS:
             files = new_path.rglob(f"*{ext}")
             for file in files:
-                if file.suffix in IMAGE_EXTENSIONS:
+                if file.suffix in img_extensions.IMAGE_EXTENSIONS:
                     click.echo(file.name)
     else:
         for path in new_path.iterdir():
